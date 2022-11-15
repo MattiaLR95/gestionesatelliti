@@ -67,7 +67,7 @@ public class ImpiegatoController {
 		return "redirect:/satellite";
 	}
 
-	@GetMapping("/show/{idsatellite}")
+	@GetMapping("/show/{idSatellite}")
 	public String show(@PathVariable(required = true) Long idSatellite, Model model) {
 		model.addAttribute("show_impiegato_attr", satelliteService.caricaSingoloElemento(idSatellite));
 		return "satellite/show";
