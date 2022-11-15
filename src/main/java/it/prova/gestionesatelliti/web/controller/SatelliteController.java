@@ -22,7 +22,7 @@ import it.prova.gestionesatelliti.service.SatelliteService;
 
 @Controller
 @RequestMapping(value = "/satellite")
-public class ImpiegatoController {
+public class SatelliteController {
 
 	@Autowired
 	private SatelliteService satelliteService;
@@ -69,7 +69,7 @@ public class ImpiegatoController {
 
 	@GetMapping("/show/{idSatellite}")
 	public String show(@PathVariable(required = true) Long idSatellite, Model model) {
-		model.addAttribute("show_impiegato_attr", satelliteService.caricaSingoloElemento(idSatellite));
+		model.addAttribute("show_satellite_attr", satelliteService.caricaSingoloElemento(idSatellite));
 		return "satellite/show";
 	}
 
