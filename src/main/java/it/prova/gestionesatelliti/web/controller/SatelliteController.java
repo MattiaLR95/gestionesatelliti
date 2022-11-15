@@ -55,13 +55,13 @@ public class SatelliteController {
 	}
 
 	@PostMapping("/save")
-	public String save(@Valid @ModelAttribute("insert_satellite_attr") Satellite impiegato, BindingResult result,
+	public String save(@Valid @ModelAttribute("insert_satellite_attr") Satellite satellite, BindingResult result,
 			RedirectAttributes redirectAttrs) {
 
-		if (result.hasErrors())
+		if (result.hasErrors() || satellite.getDataDiLancio().after(satellite.getDataRientro()))
 			return "satellite/insert";
 
-		satelliteService.inserisciNuovo(impiegato);
+		satelliteService.inserisciNuovo(satellite);
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite";
@@ -81,7 +81,7 @@ public class SatelliteController {
 
 	@PostMapping("/savedelete/{idSatellite}")
 	public String saveDelete(@PathVariable(required = true) Long idSatellite, RedirectAttributes redirectAttrs) {
-
+		
 		satelliteService.rimuovi(idSatellite);
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite";
