@@ -66,10 +66,36 @@ public class SatelliteController {
 			return "satellite/insert";
 		}
 
-		if (satellite.getDataDiLancio() != null && satellite.getDataDiLancio().before(new Date())
-				&& satellite.getStato()==null) {
-			model.addAttribute("errorMessage", "Attenzione! Stato non dichiarato");
-			return "satellite/insert";
+		if (satellite.getDataDiLancio() != null) {
+			if(satellite.getDataRientro()!= null) {
+				if(satellite.getDataDiLancio().after(satellite.getDataRientro())) {
+					result.rejectValue("dataDiLancio", "error.data");
+					return "satellite/insert";
+				}
+			}
+		}
+		
+		if(satellite.getDataDiLancio()!=null) {
+			if(satellite.getDataDiLancio().before(new Date())) {
+				if(satellite.getStato()==null) {
+					result.rejectValue("stato", "error.data.stato");
+					return "satellite/insert";
+				}
+			}
+		}
+		
+		if(satellite.getDataDiLancio()==null) {
+			if(satellite.getDataRientro()!=null) {
+				result.rejectValue("stato", "error.data.dataRientro");
+				return "satellite/insert";
+			}
+		}
+		
+		if(satellite.getDataDiLancio().after(new Date())) {
+			if(satellite.getStato()!=null) {
+				result.rejectValue("stato", "error.data.stato1");
+				return "satellite/insert";
+			}
 		}
 
 		satelliteService.inserisciNuovo(satellite);

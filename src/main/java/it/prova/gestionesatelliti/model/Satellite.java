@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,6 +36,7 @@ public class Satellite {
 	private Date dataRientro;
 
 	@Column(name = "stato")
+	@Enumerated(EnumType.STRING)
 	private Stato stato;
 
 	public Satellite() {

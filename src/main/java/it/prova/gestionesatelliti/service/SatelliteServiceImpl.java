@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,16 +81,19 @@ public class SatelliteServiceImpl implements SatelliteService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Satellite> trovaSatellitiDueAnni(Date dataOggi) {
 		return repository.FindSatellitiDueAnni(dataOggi);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Satellite> trovaSatellitiNonRientrati() {
-		return repository.findSatellitiNonRientrati();
+		return repository.FindSatellitiNonRientrati();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Satellite> trovaSatellitiDieciAnniOrbita(Date dataOggi) {
 		return repository.FindSatellitiDieciAnniOrbita(dataOggi);
 	}
