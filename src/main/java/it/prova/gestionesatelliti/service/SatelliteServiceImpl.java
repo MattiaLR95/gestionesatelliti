@@ -98,4 +98,10 @@ public class SatelliteServiceImpl implements SatelliteService {
 		return repository.FindSatellitiDieciAnniOrbita(dataOggi);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<Satellite> trovaTuttiISatellitiNonRientrati() {
+		return repository.FindTuttiISatellitiNonRientrati();
+	}
+
 }

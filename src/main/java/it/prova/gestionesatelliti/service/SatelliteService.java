@@ -24,4 +24,6 @@ public interface SatelliteService {
 	public List<Satellite> trovaSatellitiNonRientrati();
 	
 	public List<Satellite> trovaSatellitiDieciAnniOrbita(Date dataOggi);
+	
+	public List<Satellite> trovaTuttiISatellitiNonRientrati();
 }

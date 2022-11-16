@@ -1,9 +1,13 @@
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!doctype html>
 <html lang="it" class="h-100" >
+
 	 <head>
 	 
 	 	<!-- Common imports in pages -->
-	 	<jsp:include page="./header.jsp" />
+	 	<jsp:include page="../header.jsp" />
 		<!-- Custom styles per le features di bootstrap 'Columns with icons' -->
 	   <link href="${pageContext.request.contextPath}/assets/css/features.css" rel="stylesheet" type="text/css">
 	   
@@ -36,12 +40,17 @@
 	   
 	   
 	   		<!-- Fixed navbar -->
-	   		<jsp:include page="./navbar.jsp"></jsp:include>
+	   		<jsp:include page="../navbar.jsp"></jsp:include>
 	    
 			
 			<!-- Begin page content -->
 			<main class="flex-shrink-0">
 			  <div class="container">
+			  
+			  	<div class="alert alert-success alert-dismissible fade show  ${successMessage==null?'d-none':'' }" role="alert">
+				  ${successMessage}
+				  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ></button>
+				</div>
 			  
 			  	<div class="alert alert-danger alert-dismissible fade show ${errorMessage==null?'d-none':'' }" role="alert">
 				  ${errorMessage}
@@ -50,13 +59,14 @@
 			    
 			     <div class="p-5 mb-4 bg-light rounded-3">
 				      <div class="container-fluid py-5">
-				        <h1 class="display-5 fw-bold">Benvenuto alla Gestione Impiegato</h1>
-				        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. </p>
-				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/search">Vai a Ricerca</a>
-				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/listDueAnni">Vai alla Lista SatellitiDueAnni</a>
-				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/listDisattivati">Vai alla ListaSatellitiDisattivati</a>
-				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/listOrbita">Vai a alla ListaSatelliti10AnniOrbita</a>
-				        <a class="btn btn-danger btn-lg" href="${pageContext.request.contextPath}/satellite/disabilitaTutti">Disabilita satelliti</a>
+				        <h1 class="display-5 fw-bold">DISABILITA SATELLITI</h1>
+				        <p class="col-md-8 fs-4">Sta per essere applicata la procedura di emergenza. Si è sicuri di voler procedere?</p>
+				        <p class="col-md-8 fs-4">Attualmente nel Database sono presenti ${satellite_listAll_attr} satelliti</p>
+				        <p class="col-md-8 fs-4">Pronti da disabilitare ${satellite_list_attribute} satelliti</p>
+				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/home">Back</a>
+				        <form:form method="post" action="${pageContext.request.contextPath}/satellite/saveDisabilitaTutti" class="row g-3">
+				        <button type="submit" name="submit" value="submit" id="submit" class="btn btn-danger">Conferma</button>
+				        </form:form>
 				      </div>
 			    </div>
 			    
@@ -104,6 +114,6 @@
 			</main>
 			
 			<!-- Footer -->
-			<jsp:include page="./footer.jsp" />
+			<jsp:include page="../footer.jsp" />
 	  </body>
 </html>

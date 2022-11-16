@@ -32,16 +32,18 @@ public class SatelliteController {
 	private SatelliteService satelliteService;
 
 	@GetMapping
-	public ModelAndView listAll() {
+	public ModelAndView listAll(Model model) {
 		ModelAndView mv = new ModelAndView();
 		List<Satellite> results = satelliteService.listAllElements();
 		mv.addObject("satellite_list_attribute", results);
 		mv.setViewName("satellite/list");
+		model.addAttribute("todayDate_attr", new Date());
 		return mv;
 	}
 
 	@GetMapping("/search")
-	public String search() {
+	public String search(Model model) {
+		model.addAttribute("todayDate_attr", new Date());
 		return "satellite/search";
 	}
 
@@ -49,6 +51,7 @@ public class SatelliteController {
 	public String listByExample(Satellite example, ModelMap model) {
 		List<Satellite> results = satelliteService.findByExample(example);
 		model.addAttribute("satellite_list_attribute", results);
+		model.addAttribute("todayDate_attr", new Date());
 		return "satellite/list";
 	}
 
@@ -100,6 +103,7 @@ public class SatelliteController {
 
 		satelliteService.inserisciNuovo(satellite);
 
+		model.addAttribute("todayDate_attr", new Date());
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite";
 	}
@@ -107,6 +111,7 @@ public class SatelliteController {
 	@GetMapping("/show/{idSatellite}")
 	public String show(@PathVariable(required = true) Long idSatellite, Model model) {
 		model.addAttribute("show_satellite_attr", satelliteService.caricaSingoloElemento(idSatellite));
+		model.addAttribute("todayDate_attr", new Date());
 		return "satellite/show";
 	}
 
@@ -117,7 +122,7 @@ public class SatelliteController {
 	}
 
 	@PostMapping("/savedelete/{idSatellite}")
-	public String saveDelete(@PathVariable(required = true) Long idSatellite, RedirectAttributes redirectAttrs) {
+	public String saveDelete(@PathVariable(required = true) Long idSatellite, RedirectAttributes redirectAttrs, Model model) {
 
 		Satellite satelliteReloaded = satelliteService.caricaSingoloElemento(idSatellite);
 		
@@ -128,6 +133,7 @@ public class SatelliteController {
 			}
 		}
 
+		model.addAttribute("todayDate_attr", new Date());
 		satelliteService.rimuovi(idSatellite);
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite";
@@ -141,7 +147,7 @@ public class SatelliteController {
 
 	@PostMapping("/saveupdate")
 	public String saveUpdate(@Valid @ModelAttribute("update_satellite_attr") Satellite satellite, BindingResult result,
-			RedirectAttributes redirectAttrs) {
+			RedirectAttributes redirectAttrs, Model model) {
 
 		if (result.hasErrors())
 			return "satellite/update";
@@ -164,7 +170,8 @@ public class SatelliteController {
 		}
 		
 		satelliteService.aggiorna(satellite);
-
+		
+		model.addAttribute("todayDate_attr", new Date());
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite";
 	}
@@ -208,16 +215,17 @@ public class SatelliteController {
 	}
 
 	@GetMapping("/listDisattivati")
-	public ModelAndView listAllDisattivati() {
+	public ModelAndView listAllDisattivati(Model model) {
 		ModelAndView mv = new ModelAndView();
 		List<Satellite> results = satelliteService.trovaSatellitiNonRientrati();
+		model.addAttribute("todayDate_attr", new Date());
 		mv.addObject("satellite_list_attribute", results);
 		mv.setViewName("satellite/list");
 		return mv;
 	}
 
 	@GetMapping("/listOrbita")
-	public ModelAndView listAllDieciAnniOrbita() {
+	public ModelAndView listAllDieciAnniOrbita(Model model) {
 		ModelAndView mv = new ModelAndView();
 
 		Date dataProva = new Date();
@@ -226,8 +234,33 @@ public class SatelliteController {
 		calendar.add(Calendar.YEAR, -10);
 		Date dataMenoDue = calendar.getTime();
 		List<Satellite> results = satelliteService.trovaSatellitiDieciAnniOrbita(dataMenoDue);
+		model.addAttribute("todayDate_attr", new Date());
 		mv.addObject("satellite_list_attribute", results);
 		mv.setViewName("satellite/list");
 		return mv;
 	}
+	
+	@GetMapping("/disabilitaTutti")
+	public ModelAndView disabilitaTutti() {
+		ModelAndView mv = new ModelAndView();
+		List<Satellite> satellitiTotali = satelliteService.listAllElements();
+		List<Satellite> results = satelliteService.trovaTuttiISatellitiNonRientrati();
+		mv.addObject("satellite_list_attribute", results.size());
+		mv.addObject("satellite_listAll_attr", satellitiTotali.size());
+		mv.setViewName("satellite/disabilita");
+		return mv;
+	}
+	
+	@PostMapping("/saveDisabilitaTutti")
+	public String saveDisabilitaTutti (RedirectAttributes redirectAttributes) {
+		Date data = new Date();
+		for (Satellite satelliteItem : satelliteService.trovaTuttiISatellitiNonRientrati()) {
+			satelliteItem.setDataRientro(data);
+			satelliteItem.setStato(Stato.DISATTIVATO);
+			satelliteService.aggiorna(satelliteItem);
+		}
+		redirectAttributes.addFlashAttribute("successMessage","SATELLITI DISABILITATI");
+		return "redirect:/home";
+	}
+	
 }
