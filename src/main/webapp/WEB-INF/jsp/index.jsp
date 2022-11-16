@@ -53,6 +53,9 @@
 				        <h1 class="display-5 fw-bold">Benvenuto alla Gestione Impiegato</h1>
 				        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. </p>
 				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/search">Vai a Ricerca</a>
+				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/listDueAnni">Vai alla Lista SatellitiDueAnni</a>
+				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/listDisattivati">Vai alla ListaSatellitiDisattivati</a>
+				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/satellite/listOrbita">Vai a alla ListaSatelliti10AnniOrbita</a>
 				      </div>
 			    </div>
 			    
@@ -67,7 +70,7 @@
 			        </div>
 			        <h2>Ricerca Satelliti</h2>
 			        <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-			        <a href="impiegato/search" class="icon-link">
+			        <a href="satellite/search" class="icon-link">
 			          Vai alla funzionalità
 			          <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
 			        </a>

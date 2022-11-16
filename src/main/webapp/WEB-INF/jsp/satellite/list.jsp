@@ -62,11 +62,29 @@
 											<td>${satelliteItem.codice }</td>
 											<td><fmt:formatDate type = "date" value = "${satelliteItem.dataDiLancio }" /></td>
 											<td><fmt:formatDate type = "date" value = "${satelliteItem.dataRientro}" /></td>
-											<td>${impiegatoItem.stato }</td>
+											<td>${satelliteItem.stato }</td>
 											<td>
 												<a class="btn  btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/satellite/show/${satelliteItem.id }">Visualizza</a>
 												<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/satellite/update/${satelliteItem.id }">Edit</a>
 												<a class="btn btn-outline-danger btn-sm" href="${pageContext.request.contextPath}/satellite/delete/${satelliteItem.id }">Delete</a>
+												<div class="btn-group">
+													<div>
+														<c:if test="${satelliteItem.dataDiLancio == null }">
+															<form method="post" action="${pageContext.request.contextPath}/satellite/lancia">
+																<button type="submit" name="submit" value="submit" id="submit" class="btn btn-outline-primary btn-sm">Lancia</button>
+																<input type="hidden" name="idSatellite" value="${satelliteItem.id}">
+															</form>
+														</c:if>
+													</div>
+													<div style="margin-left: 4px">
+														<c:if test="${satelliteItem.dataRientro == null }">
+															<form method="post" action="${pageContext.request.contextPath}/satellite/rientro">
+																<button type="submit" name="submit" value="submit" id="submit" class="btn btn-outline-primary btn-sm">Rientra</button>
+																<input type="hidden" name="idSatellite" value="${satelliteItem.id}">
+															</form>
+														</c:if>
+													</div>
+												</div>
 											</td>
 										</tr>
 									</c:forEach>

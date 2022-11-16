@@ -1,6 +1,7 @@
 package it.prova.gestionesatelliti.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
@@ -78,6 +79,21 @@ public class SatelliteServiceImpl implements SatelliteService {
 		};
 
 		return repository.findAll(specificationCriteria);
+	}
+
+	@Override
+	public List<Satellite> trovaSatellitiDueAnni(Date dataOggi) {
+		return repository.FindSatellitiDueAnni(dataOggi);
+	}
+
+	@Override
+	public List<Satellite> trovaSatellitiNonRientrati() {
+		return repository.findSatellitiNonRientrati();
+	}
+
+	@Override
+	public List<Satellite> trovaSatellitiDieciAnniOrbita(Date dataOggi) {
+		return repository.FindSatellitiDieciAnniOrbita(dataOggi);
 	}
 
 }
