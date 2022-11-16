@@ -7,7 +7,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -147,23 +146,23 @@ public class SatelliteController {
 		if (result.hasErrors())
 			return "satellite/update";
 		
-		if(satellite.getDataDiLancio().before(new Date())) {
+		if(satellite.getDataDiLancio()!=null && satellite.getDataDiLancio().before(new Date())) {
 			result.rejectValue("dataDiLancio", "error.data.dataUpdate");
 			return "satellite/update";
 		}
 		
-		if(satellite.getDataRientro().before(new Date())) {
-			result.rejectValue("dataDiLancio", "error.data.dataUpdate");
+		if(satellite.getDataRientro()!=null && satellite.getDataRientro().before(new Date())) {
+			result.rejectValue("dataRientro", "error.data.dataUpdate");
 			return "satellite/update";
 		}
 		
-		if(satellite.getDataRientro().after(new Date())) {
+		if(satellite.getDataRientro()!=null && satellite.getDataRientro().after(new Date())) {
 			if(satellite.getStato() == null || satellite.getStato()==Stato.DISATTIVATO) {
 				result.rejectValue("stato", "error.data.statoUpdate");
 				return "satellite/update";
 			}
 		}
-
+		
 		satelliteService.aggiorna(satellite);
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
