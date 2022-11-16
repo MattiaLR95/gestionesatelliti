@@ -67,32 +67,32 @@ public class SatelliteController {
 		}
 
 		if (satellite.getDataDiLancio() != null) {
-			if(satellite.getDataRientro()!= null) {
-				if(satellite.getDataDiLancio().after(satellite.getDataRientro())) {
+			if (satellite.getDataRientro() != null) {
+				if (satellite.getDataDiLancio().after(satellite.getDataRientro())) {
 					result.rejectValue("dataDiLancio", "error.data");
 					return "satellite/insert";
 				}
 			}
 		}
-		
-		if(satellite.getDataDiLancio()!=null) {
-			if(satellite.getDataDiLancio().before(new Date())) {
-				if(satellite.getStato()==null) {
+
+		if (satellite.getDataDiLancio() != null) {
+			if (satellite.getDataDiLancio().before(new Date())) {
+				if (satellite.getStato() == null) {
 					result.rejectValue("stato", "error.data.stato");
 					return "satellite/insert";
 				}
 			}
 		}
-		
-		if(satellite.getDataDiLancio()==null) {
-			if(satellite.getDataRientro()!=null) {
+
+		if (satellite.getDataDiLancio() == null) {
+			if (satellite.getDataRientro() != null) {
 				result.rejectValue("stato", "error.data.dataRientro");
 				return "satellite/insert";
 			}
 		}
-		
-		if(satellite.getDataDiLancio().after(new Date())) {
-			if(satellite.getStato()!=null) {
+
+		if (satellite.getDataDiLancio().after(new Date())) {
+			if (satellite.getStato() != null) {
 				result.rejectValue("stato", "error.data.stato1");
 				return "satellite/insert";
 			}
@@ -119,6 +119,15 @@ public class SatelliteController {
 	@PostMapping("/savedelete/{idSatellite}")
 	public String saveDelete(@PathVariable(required = true) Long idSatellite, RedirectAttributes redirectAttrs) {
 
+		Satellite satelliteReloaded = satelliteService.caricaSingoloElemento(idSatellite);
+		
+		if(satelliteReloaded.getDataDiLancio().before(new Date())) {
+			if(satelliteReloaded.getDataRientro().after(new Date())) {
+				redirectAttrs.addFlashAttribute("errorMessage","Impossibile eliminare");
+				return "redirect:/satellite";
+			}
+		}
+
 		satelliteService.rimuovi(idSatellite);
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite";
@@ -142,7 +151,7 @@ public class SatelliteController {
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite";
 	}
-	
+
 	@PostMapping("/lancia")
 	public String lancia(@RequestParam(name = "idSatellite") Long idSatellite, ModelMap model) {
 		Satellite satellite = satelliteService.caricaSingoloElemento(idSatellite);
@@ -165,11 +174,11 @@ public class SatelliteController {
 		model.addAttribute("satellite_list_attribute", satelliteService.listAllElements());
 		return "satellite/list";
 	}
-	
+
 	@GetMapping("/listDueAnni")
 	public ModelAndView listAllDueAnni() {
 		ModelAndView mv = new ModelAndView();
-		
+
 		Date dataProva = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(dataProva);
@@ -180,7 +189,7 @@ public class SatelliteController {
 		mv.setViewName("satellite/list");
 		return mv;
 	}
-	
+
 	@GetMapping("/listDisattivati")
 	public ModelAndView listAllDisattivati() {
 		ModelAndView mv = new ModelAndView();
@@ -189,11 +198,11 @@ public class SatelliteController {
 		mv.setViewName("satellite/list");
 		return mv;
 	}
-	
+
 	@GetMapping("/listOrbita")
 	public ModelAndView listAllDieciAnniOrbita() {
 		ModelAndView mv = new ModelAndView();
-		
+
 		Date dataProva = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(dataProva);
